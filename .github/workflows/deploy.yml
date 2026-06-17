@@ -2,7 +2,7 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build-deploy:
@@ -12,17 +12,17 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Build Docker Image
+      - name: Build Docker Image (local check)
         run: docker build -t cicd-app .
 
-      - name: Deploy to EC2
+      - name: Deploy to EC2 via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
+          username: ubuntu   # IMPORTANT: fix this
           key: ${{ secrets.EC2_KEY }}
           script: |
-            docker stop cicd-app || true
-            docker rm cicd-app || true
-            docker build -t cicd-app .
-            docker run -d -p 80:3000 --name cicd-app cicd-app
+            sudo docker stop cicd-app || true
+            sudo docker rm cicd-app || true
+            sudo docker build -t cicd-app .
+            sudo docker run -d -p 80:3000 --name cicd-app cicd-app
