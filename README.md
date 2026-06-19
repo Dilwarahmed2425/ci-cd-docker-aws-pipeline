@@ -2,22 +2,13 @@
 
 ## 📌 Project Overview
 
-This project demonstrates a complete CI/CD (Continuous Integration and Continuous Deployment) pipeline for a Node.js application using GitHub Actions, Docker, Docker Hub, and AWS EC2.
+This project demonstrates an end-to-end CI/CD pipeline for a Dockerized Node.js application using **GitHub Actions**, **Docker**, **Docker Hub**, and **AWS EC2**.
 
-Whenever code is pushed to the **main** branch, GitHub Actions automatically:
-
-- Builds the Docker image
-- Pushes the image to Docker Hub
-- Connects to AWS EC2 using SSH
-- Pulls the latest Docker image
-- Stops and removes the existing container
-- Deploys the latest application container automatically
-
-This eliminates manual deployment and provides a fast, reliable deployment process.
+Whenever code is pushed to the **main** branch, GitHub Actions automatically builds the Docker image, pushes it to Docker Hub, connects to an AWS EC2 instance through SSH, and deploys the latest version of the application. This eliminates manual deployment and ensures a consistent and reliable release process.
 
 ---
 
-# 🏗️ Architecture
+## 🏗️ Architecture
 
 ```
 Developer
@@ -31,34 +22,35 @@ GitHub Actions
      ├── Checkout Source Code
      ├── Build Docker Image
      ├── Push Image to Docker Hub
-     └── SSH into AWS EC2
-                 │
-                 ▼
-          Pull Latest Docker Image
-                 │
-                 ▼
+     └── Deploy to AWS EC2
+                  │
+                  ▼
+         Pull Latest Docker Image
+                  │
+                  ▼
         Restart Docker Container
-                 │
-                 ▼
-         Application Available
+                  │
+                  ▼
+      Application Available on EC2
 ```
 
 ---
 
-# 🛠️ Technologies Used
+## 🛠️ Technologies Used
 
-- Git & GitHub
-- GitHub Actions
-- Docker
-- Docker Hub
-- AWS EC2 (Ubuntu)
-- Linux
-- Node.js
-- SSH
+* Git
+* GitHub
+* GitHub Actions
+* Docker
+* Docker Hub
+* AWS EC2
+* Ubuntu Linux
+* Node.js
+* SSH
 
 ---
 
-# 📁 Project Structure
+## 📂 Project Structure
 
 ```
 ci-cd-pipeline-automation/
@@ -67,196 +59,119 @@ ci-cd-pipeline-automation/
 │   └── workflows/
 │       └── deploy.yml
 │
+├── Dockerfile
 ├── app.js
 ├── package.json
-├── Dockerfile
 ├── .gitignore
 └── README.md
 ```
 
 ---
 
-# ⚙️ CI/CD Workflow
+## ⚙️ CI/CD Workflow
 
-The pipeline is triggered automatically whenever code is pushed to the **main** branch.
+The pipeline is automatically triggered whenever code is pushed to the **main** branch.
 
 Workflow Steps:
 
-1. Checkout source code
+1. Checkout the latest source code
 2. Set up Docker Buildx
-3. Login to Docker Hub
+3. Authenticate with Docker Hub
 4. Build Docker image
 5. Push Docker image to Docker Hub
-6. Connect to AWS EC2 via SSH
-7. Pull latest Docker image
-8. Stop existing container
-9. Remove old container
-10. Deploy new container
+6. Connect to AWS EC2 using SSH
+7. Pull the latest Docker image
+8. Stop and remove the existing container
+9. Start a new container with the updated image
 
 ---
 
-# 🔐 GitHub Secrets Used
+## 🔐 GitHub Secrets
 
-The following repository secrets are configured:
+The following GitHub repository secrets are used:
 
-| Secret | Purpose |
-|----------|----------|
-| DOCKER_USERNAME | Docker Hub Username |
-| DOCKER_PASSWORD | Docker Hub Access Token |
-| EC2_HOST | EC2 Public IP |
-| EC2_USER | EC2 Username |
-| EC2_KEY | Private SSH Key |
-
----
-
-# 🐳 Docker Commands Used
-
-Build Image
-
-```bash
-docker build -t username/cicd-node-app .
-```
-
-Push Image
-
-```bash
-docker push username/cicd-node-app:latest
-```
-
-Run Container
-
-```bash
-docker run -d -p 80:3000 username/cicd-node-app
-```
+| Secret          | Description                      |
+| --------------- | -------------------------------- |
+| DOCKER_USERNAME | Docker Hub Username              |
+| DOCKER_PASSWORD | Docker Hub Personal Access Token |
+| EC2_HOST        | AWS EC2 Public IP                |
+| EC2_USER        | EC2 Username                     |
+| EC2_KEY         | Private SSH Key                  |
 
 ---
 
-# 🚀 Deployment Process
-
-1. Developer pushes code to GitHub.
-2. GitHub Actions starts automatically.
-3. Docker image is built.
-4. Image is pushed to Docker Hub.
-5. GitHub Actions connects to AWS EC2.
-6. Latest Docker image is pulled.
-7. Existing container is replaced.
-8. Updated application becomes available.
-
----
-
-# 📸 Screenshots
-
-## GitHub Actions
-
-_Add screenshot here_
-
-```
-screenshots/github-actions-success.png
-```
-
----
-
-## Docker Hub Repository
-
-_Add screenshot here_
-
-```
-screenshots/dockerhub-image.png
-```
-
----
-
-## Running Container on EC2
-
-_Add screenshot here_
-
-```
-screenshots/docker-ps.png
-```
-
----
-
-## Application Output
-
-_Add screenshot here_
-
-```
-screenshots/application.png
-```
-
----
-
-# ▶️ How to Run Locally
-
-Clone Repository
-
-```bash
-git clone https://github.com/your-username/ci-cd-pipeline-automation.git
-```
-
-Move into project
-
-```bash
-cd ci-cd-pipeline-automation
-```
+## 🐳 Docker Commands
 
 Build Docker Image
 
 ```bash
-docker build -t cicd-node-app .
+docker build -t <dockerhub-username>/cicd-node-app .
 ```
 
-Run Container
+Push Docker Image
 
 ```bash
-docker run -d -p 3000:3000 cicd-node-app
+docker push <dockerhub-username>/cicd-node-app:latest
 ```
 
-Open Browser
+Run Docker Container
 
+```bash
+docker run -d -p 80:3000 <dockerhub-username>/cicd-node-app:latest
 ```
-http://localhost:3000
-```
 
 ---
 
-# 📈 Key Features
+## 🚀 Deployment Process
 
-- Automated CI/CD pipeline
-- Docker containerization
-- Secure GitHub Secrets management
-- Automatic deployment to AWS EC2
-- Zero manual deployment steps
-- Repeatable and reliable deployment process
-
----
-
-# 📚 Skills Demonstrated
-
-- CI/CD Automation
-- GitHub Actions
-- Docker
-- Docker Hub
-- AWS EC2
-- Linux Administration
-- SSH Automation
-- Git Version Control
-- DevOps Workflow
+* Developer pushes code to GitHub.
+* GitHub Actions automatically starts the workflow.
+* Docker image is built.
+* Image is pushed to Docker Hub.
+* GitHub Actions connects to AWS EC2 using SSH.
+* EC2 pulls the latest Docker image.
+* Existing container is replaced.
+* Updated application becomes available.
 
 ---
 
-# 🔮 Future Enhancements
+## ✨ Features
 
-- Add automated testing before deployment
-- Add rollback strategy
-- Deploy using Docker Compose
-- Add monitoring with Prometheus & Grafana
-- Configure Nginx Reverse Proxy
-- Add SSL using Let's Encrypt
+* Automated CI/CD pipeline
+* Docker containerization
+* Automated deployment to AWS EC2
+* Secure GitHub Secrets management
+* Zero manual deployment
+* Fast and repeatable deployments
 
 ---
 
-# 👨‍💻 Author
+## 📚 Skills Demonstrated
+
+* CI/CD Pipeline Automation
+* GitHub Actions
+* Docker
+* Docker Hub
+* AWS EC2
+* Linux Administration
+* SSH Automation
+* Git Version Control
+* DevOps Best Practices
+
+---
+
+## 🔮 Future Improvements
+
+* Add automated unit testing
+* Integrate code quality checks
+* Deploy with Docker Compose
+* Configure Nginx Reverse Proxy
+* Add HTTPS using Let's Encrypt
+* Add monitoring with Prometheus and Grafana
+
+---
+
+## 👨‍💻 Author
 
 **Dilwar Ahmed**
 
@@ -264,4 +179,4 @@ GitHub: https://github.com/dilwarahmed
 
 ---
 
-⭐ If you found this project useful, consider giving it a Star!
+⭐ If you found this project helpful, feel free to star the repository.
